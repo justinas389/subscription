@@ -2,66 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSubscriptionRequest;
-use App\Http\Requests\UpdateSubscriptionRequest;
+use App\States\PhaseState;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Services\SubscriptionService;
+use Spatie\ModelStates\Exceptions\TransitionNotFound;
+use Spatie\ModelStates\Validation\ValidStateRule;
 
 class SubscriptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function transitionToNextPhase(Request $request, Subscription $subscription)
     {
-        return Subscription::paginate(5)->toResourceCollection();
+        $data = $request->validate([
+            'phase' => new ValidStateRule(PhaseState::class),
+        ]);
+
+        try {
+            $subscription->phase->transitionTo($data['phase'])->toResource();
+        } catch (TransitionNotFound $th) {
+            abort(422, 'Invalid phase transition');
+        }
+
+        return $subscription;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function calculateProRatedAmount(Request $request, Subscription $subscription, SubscriptionService $service)
     {
-        //
-    }
+        $data = $request->validate([
+            'usedUntil' => 'required|date_format:Y-m-d',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreSubscriptionRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSubscriptionRequest $request, Subscription $subscription)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Subscription $subscription)
-    {
-        //
+        return ['amount' => $service->calculateUsageAmount($subscription, $data['usedUntil'])];
     }
 }

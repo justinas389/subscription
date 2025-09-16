@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Enums\Phase;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\States\PhaseState;
+use Spatie\ModelStates\HasStates;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Subscription extends Model
 {
     /** @use HasFactory<\Database\Factories\SubscriptionFactory> */
-    use HasFactory;
+    use HasFactory, HasStates;
 
     /**
      * The attributes that are mass assignable.
@@ -24,15 +25,9 @@ class Subscription extends Model
         'price',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'phase' => Phase::class,
-        ];
-    }
+    protected $casts = [
+        'phase' => PhaseState::class,
+        'start_date' => 'datetime',
+        'end_date'   => 'datetime',
+    ];
 }

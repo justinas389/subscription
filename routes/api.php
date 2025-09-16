@@ -9,5 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('subscriptions', SubscriptionController::class);
+    Route::post('subscriptions/{subscription}/transition', [SubscriptionController::class, 'transitionToNextPhase']);
+    Route::get('subscriptions/{subscription}/amount', [SubscriptionController::class, 'calculateProRatedAmount']);
+    Route::get('subscriptions', [SubscriptionController::class, 'index']);
 });
