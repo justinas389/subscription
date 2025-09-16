@@ -1,0 +1,29 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Enums\Phase;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Subscription>
+ */
+class SubscriptionFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'user_id' => User::factory(),
+            'phase' => $this->faker->randomElement(Phase::cases()),
+            'start_date' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'end_date' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'price' => $this->faker->randomFloat(2, 5, 100),
+        ];
+    }
+}
