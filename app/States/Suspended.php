@@ -6,5 +6,5 @@ use App\States\PhaseState;
 
 class Suspended extends PhaseState
 {
-    public static $name = 'suspended';
+    public static string $name = 'suspended';
 }

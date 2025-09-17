@@ -9,24 +9,11 @@ use Illuminate\Console\Command;
 
 class ActivateTrialSubscriptions extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'activate-trial-subscriptions';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Activate subscriptions whose trial ended';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): void
     {
         $subscriptions = Subscription::whereState('phase', Trial::class)
             ->where('end_date', '<=', now())

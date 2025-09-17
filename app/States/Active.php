@@ -6,5 +6,5 @@ use App\States\PhaseState;
 
 class Active extends PhaseState
 {
-    public static $name = 'active';
+    public static string $name = 'active';
 }

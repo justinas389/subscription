@@ -7,8 +7,6 @@ use App\States\Canceled;
 use App\States\Suspended;
 use App\Models\Subscription;
 use Laravel\Sanctum\Sanctum;
-use App\Services\SubscriptionService;
-use Illuminate\Testing\Fluent\AssertableJson;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -63,7 +61,11 @@ it('calculates prorated amount successfully', function () {
         'usedUntil' => $usedUntil,
     ]));
 
-    $response->assertOk()->assertExactJson(['amount' => 50]);
+    $response->assertOk()->assertExactJson([
+        'data' => [
+            'amount' => 50
+        ]
+    ]);
 });
 
 it('activates trial subscriptions whose end date has passed', function () {
