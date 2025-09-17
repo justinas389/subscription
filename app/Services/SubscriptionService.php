@@ -16,6 +16,6 @@ class SubscriptionService
 
         $precentageUsed = min(100, max(0, ($usedDuration / $totalDuration) * 100));
 
-        return round(($precentageUsed / 100) * $subscription->price, 2);
+        return round((intval($precentageUsed) / 100) * $subscription->price, 2);
     }
 }

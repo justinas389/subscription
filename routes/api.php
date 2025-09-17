@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('subscriptions/{subscription}/transition', [SubscriptionController::class, 'transitionToNextPhase']);
-    Route::get('subscriptions/{subscription}/amount', [SubscriptionController::class, 'calculateProRatedAmount']);
+    Route::post('subscriptions/{subscription}/transition', [SubscriptionController::class, 'transitionToNextPhase'])->name('subscriptions.transition');
+    Route::get('subscriptions/{subscription}/amount', [SubscriptionController::class, 'calculateProRatedAmount'])->name('subscriptions.amount');
     Route::get('subscriptions', [SubscriptionController::class, 'index']);
 });
